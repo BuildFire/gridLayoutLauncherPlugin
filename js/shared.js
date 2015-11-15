@@ -11,6 +11,7 @@ folderPluginShared.getPluginDetails = function (pluginsInfo, pluginIds) {
                 tempPlugin.instanceId = pluginsInfo[i].data.instanceId;
                 if (pluginsInfo[i].data) {
                     tempPlugin.iconUrl = pluginsInfo[i].data.iconUrl;
+                    tempPlugin.iconClassName = pluginsInfo[i].data.iconClassName;
                     tempPlugin.title = pluginsInfo[i].data.title;
                     tempPlugin.pluginTypeId = pluginsInfo[i].data.pluginType.token;
                     tempPlugin.folderName = pluginsInfo[i].data.pluginType.folderName;
