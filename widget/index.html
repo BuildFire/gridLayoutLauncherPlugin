@@ -23,6 +23,12 @@
 
 </head>
 <body ng-cloak class="gridLayout" ng-controller="folderPluginCtrl" data-back-img="{{backgroundImage}}">
+<style>
+    .item-disabled {
+        cursor: not-allowed !important;
+        opacity: 0.4;
+    }
+</style>
 <style ng-if="data.design.colorType === 'C'">
     body.gridLayout {
     background-color: {{data.design.colors.backgroundColor}} !important;
@@ -65,7 +71,7 @@
 
         <div class="menu-links">
 			<div class="menu-link" ng-repeat="plugin in data.plugins" ng-click="navigateToPlugin(plugin)">
-            	<a class="menu-item clearfix">
+            	<a class="menu-item clearfix" ng-class="shouldDisable(plugin)" ng-hide="shouldHide(plugin) ">
 	                <img load-image="1x1" data-final-src="{{ plugin.iconUrl}}" crop-width="100" crop-height="100" ng-if="plugin.iconUrl"  crop-type="crop" class="pull-left">
 	                <span class="main-icon pull-left {{ plugin.iconClassName }}" ng-if="plugin.iconClassName"></span>
 	                <span class="main-icon pull-left icon icon-puzzle" ng-if="!plugin.iconUrl && !plugin.iconClassName"></span>
@@ -124,6 +130,7 @@
                         tempPlugin.pluginTypeId = pluginsInfo[i].data.pluginType.token;
                         tempPlugin.folderName = pluginsInfo[i].data.pluginType.folderName;
                         tempPlugin.iconClassName = pluginsInfo[i].data.iconClassName;
+                        tempPlugin.hasAccess= pluginsInfo[i].hasAccess === undefined?true:pluginsInfo[i].hasAccess;
                         returnPlugins.push(tempPlugin);
                     }
                 } else if (pluginIds[id] == pluginsInfo[i].instanceId) {
@@ -314,10 +321,41 @@
         $scope.pageSize = folderPluginShared.getLayoutsPageSize();
         $scope.layoutClass = folderPluginShared.getLayoutsClass();
 
-
+        $scope.shouldHide=function(plugin){
+            plugin.hasAccess= plugin.hasAccess === undefined?true:plugin.hasAccess;
+           return !plugin.hasAccess && $scope.data.design.securedFeaturesOption=='Hide';
+        };
+        $scope.shouldDisable=function(plugin){
+            plugin.hasAccess= plugin.hasAccess === undefined?true:plugin.hasAccess;
+            return !plugin.hasAccess && $scope.data.design.securedFeaturesOption=='Disable'?"item-disabled":"";
+        };
         /*declare the device width heights*/
         $rootScope.deviceHeight = window.innerHeight;
         $rootScope.deviceWidth = window.innerWidth;
+
+        buildfire.auth.onLogin(function (user) {
+            console.log('New user loggedIN reload data to apply security', user);
+            if (user && user._id) {
+                buildfire.datastore.getWithDynamicData(function (err, result) {
+                    if (err) {
+                        console.error("Error: ", err);
+                        return;
+                    }
+                    dataLoadedHandler(result);
+                });
+            }
+        });
+        // On Logout
+        buildfire.auth.onLogout(function () {
+            console.log('User loggedOut reload data to apply security');
+            buildfire.datastore.getWithDynamicData(function (err, result) {
+                if (err) {
+                    console.error("Error: ", err);
+                    return;
+                }
+                dataLoadedHandler(result);
+            });
+        });
 
         function initDeviceSize(callback) {
             deviceHeight = window.innerHeight;
@@ -344,6 +382,7 @@
             if (plugins instanceof Array) {
                 pluginsLength = plugins.length;
                 for (var i = 0; i < pluginsLength; i++) {
+                    plugins[i].hasAccess =  plugins[i].hasAccess === undefined?true:plugins[i].hasAccess;
                     if (i % pageSize == 0) {
                         currentItem++;
                         temp[currentItem] = [];
@@ -375,6 +414,8 @@
                     }
                 };
             }
+            if(!$scope.data.design.securedFeaturesOption)
+                $scope.data.design.securedFeaturesOption="Enable";
 
             setBackgroundImage();
 
@@ -530,23 +571,29 @@
         };
 
         $scope.navigateToPlugin = function (plugin) {
+
+            if (plugin.hasAccess || $scope.data.design.securedFeaturesOption == "Enable") {
+
             buildfire.navigation.navigateTo({
                 pluginId: plugin.pluginTypeId,
                 instanceId: plugin.instanceId,
                 title: plugin.title,
                 folderName: plugin.folderName
             });
+            }
         };
 
         $(document).on("click", ".navigate-to-plugin", function (e) {
             var indices = $(this).data("index").split(","),
                     plugin = $scope.data.plugins[indices[0]][indices[1]];
-            buildfire.navigation.navigateTo({
-                pluginId: plugin.pluginTypeId,
-                instanceId: plugin.instanceId,
-                title: plugin.title,
-                folderName: plugin.folderName
-            });
+            if( plugin.hasAccess|| $scope.data.design.securedFeaturesOption =="Enable") {
+                buildfire.navigation.navigateTo({
+                    pluginId: plugin.pluginTypeId,
+                    instanceId: plugin.instanceId,
+                    title: plugin.title,
+                    folderName: plugin.folderName
+                });
+            }
         });
 
         function setBackgroundImage() {
@@ -657,8 +704,10 @@
 			                       <div class="launcher-icons' + ([1, 3, 5].indexOf($scope.data.design.selectedLayout) != -1 ? ' three-row' : ' four-row') + '">';
                 for (var y = 0; y < currentSlide.length; y++) {
                     var pluginItem = currentSlide[y];
-                    slidesHTML += '<a class="launcher-icon navigate-to-plugin" data-index="' + i + ',' + y + '">\
-					            <div class="icon-holder text-center">';
+                    if(!pluginItem.hasAccess && $scope.data.design.securedFeaturesOption=="Hide")
+                        continue;
+                    slidesHTML += '<a class="launcher-icon navigate-to-plugin " '+ (!pluginItem.hasAccess && $scope.data.design.securedFeaturesOption=="Disable"?  'style="cursor: not-allowed;"': '')+' data-index="' + i + ',' + y + '">\
+					            <div class="icon-holder text-center '+ (!pluginItem.hasAccess && $scope.data.design.securedFeaturesOption=="Disable"?  'item-disabled': '')+' ">';
                     if (pluginItem.iconUrl)
                         slidesHTML += '	<img load-image="1x1" data-final-src="' + pluginItem.iconUrl+'" crop-width="100" crop-height="100" crop-type="crop">';
 
