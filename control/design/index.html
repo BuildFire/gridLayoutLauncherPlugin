@@ -145,8 +145,8 @@
             </div>
         </div>
     </div>
-    <hr>
-    <div class="padded padding-top-ten clearfix" >
+    <hr  ng-if="enterpriseApp">
+    <div  ng-if="enterpriseApp" class="padded padding-top-ten clearfix" >
         <div class="item clearfix row">
             <div class="labels col-md-3 padding-right-zero pull-left">
                 <span>Secured Feature Visibility</span>
@@ -190,7 +190,16 @@
             "bodyText": "#32373a",
             "icons": "#09a3ee"
         };
-
+        $scope.enterpriseApp = false;
+        debugger;
+        buildfire.getContext(function(error,result){
+            if(error)
+                console.error(error);
+            else {
+                if (result && result.configType && result.configType == "enterprise")
+                    $scope.enterpriseApp = true;
+            }
+        });
         $scope.availableLayouts = folderPluginShared.getLayouts();
 
         $scope.data = folderPluginShared.getDefaultScopeData();
