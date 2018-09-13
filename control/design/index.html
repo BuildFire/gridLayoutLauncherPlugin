@@ -145,6 +145,39 @@
             </div>
         </div>
     </div>
+    <hr  ng-if="enterpriseApp">
+    <div  ng-if="enterpriseApp" class="padded padding-top-ten clearfix" >
+        <div class="item clearfix row">
+            <div class="labels col-md-3 padding-right-zero pull-left">
+                <span>Secured Feature Visibility</span>
+            </div>
+            <div class="main pull-left col-md-7">
+                <div class="dropdown" dropdown>
+                    <button class="btn btn-default text-left dropdown-toggle"
+                            data-toggle="dropdown" dropdown-toggle aria-expanded="true">
+                        <span class="pull-left text-capitalize">{{data.design.securedFeaturesOption}}</span>
+                        <span class="chevron icon-chevron-down pull-right"></span>
+                    </button>
+                    <ul class="dropdown-menu extended" role="menu">
+                        <li class="text-capitalize">
+                            <a ng-click="data.design.securedFeaturesOption='Enable';">Enable</a>
+                        </li>
+                        <li class="text-capitalize">
+                            <a ng-click="data.design.securedFeaturesOption='Disable';">Disable</a>
+                        </li>
+                        <li class="text-capitalize">
+                            <a ng-click="data.design.securedFeaturesOption='Hide';">Hide</a>
+                        </li>
+                    </ul>
+                </div>
+                <p class="info margin-top-fifteen">Note: This allows you to control how features are displayed based
+                    on their Security Settings. If you require login or set up required tags, you can keep
+                    the feature "Enable" to all users, show them in the list but make them read-only with "Disable", or hide them entirely with "Hide".</p>
+                <p class="info margin-top-fifteen">Note: This feature will only work in the app, and is disabled in the control panel.</p>
+            </div>
+
+        </div>
+    </div>
 </div>
 <script>
     var folderPluginApp = angular.module('folderPluginDesign', ['ui.bootstrap', 'mp.colorPicker']);
@@ -157,7 +190,15 @@
             "bodyText": "#32373a",
             "icons": "#09a3ee"
         };
-
+        $scope.enterpriseApp = false; 
+        buildfire.getContext(function(error,result){
+            if(error)
+                console.error(error);
+            else {
+                if (result && result.configType && result.configType == "enterprise")
+                    $scope.enterpriseApp = true;
+            }
+        });
         $scope.availableLayouts = folderPluginShared.getLayouts();
 
         $scope.data = folderPluginShared.getDefaultScopeData();
@@ -193,8 +234,12 @@
                         backgroundImage: {},
                         selectedLayout: 1,
                         backgroundblur: 0,
-                        colors: {}
+                        colors: {},
+                        securedFeaturesOption:"Enable"
                     };
+                    if (!$scope.data.design.securedFeaturesOption){
+                        $scope.data.design.securedFeaturesOption = "Enable";
+                    }
                 }
                 else {
                     if (typeof($scope.data.design.backgroundImage) === "string") {
@@ -208,7 +253,9 @@
             $scope.data.design = $scope.data.design || {};
             $scope.data.design.colors = $scope.data.design.colors || {};
              //  $scope.data.design.colorType = angular.equals({}, $scope.data.design.colors) ? "A" : "C";
-
+            if (!$scope.data.design.securedFeaturesOption){
+                $scope.data.design.securedFeaturesOption = "Enable";
+            }
             if(angular.equals({}, $scope.data.design.colors)){
                 $scope.data.design.colorType = "A";
             }
