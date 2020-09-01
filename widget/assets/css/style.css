@@ -243,3 +243,6 @@
 		font-size:32px;
 	}
 }
+.plugin-slide img[style]{
+	width: 100%!important;
+}
