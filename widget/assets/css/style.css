@@ -102,6 +102,9 @@
 	top:8px;
 	font-size:16px;
 }
+.launcher-plugin.layout5 {
+  overflow: hidden;
+}
 .launcher-plugin.layout5 .launcher-icons .launcher-icon,
 .launcher-plugin.layout6 .launcher-icons .launcher-icon{
 	height:75px;
@@ -143,13 +146,27 @@
 	width: 100%;
 }
 
+#splideContainer {
+  height: 100%;
+}
+
+#splideContainer .launcher-icons .launcher-icon:nth-of-type(1),
+#splideContainer .launcher-icons .launcher-icon:nth-of-type(2),
+#splideContainer .launcher-icons .launcher-icon:nth-of-type(3) {
+  margin-top:12px;
+}
 
 /* Media Queries */
 @media (max-width:500px){
 	.launcher-plugin.layout5 .launcher-icons .launcher-icon,
 	.launcher-plugin.layout6 .launcher-icons .launcher-icon{
 		margin-bottom:30px;
-	}
+  }
+  #splideContainer .launcher-icons .launcher-icon:nth-of-type(1),
+  #splideContainer .launcher-icons .launcher-icon:nth-of-type(2),
+  #splideContainer .launcher-icons .launcher-icon:nth-of-type(3) {
+    margin-top:30px;
+  }
 }
 
 @media (max-height: 700px) {
@@ -197,7 +214,12 @@
 	.launcher-plugin.layout6 .launcher-icons .launcher-icon{
 		margin-bottom:22px;
 		height:71px;
-	}
+  }
+  #splideContainer .launcher-icons .launcher-icon:nth-of-type(1),
+  #splideContainer .launcher-icons .launcher-icon:nth-of-type(2),
+  #splideContainer .launcher-icons .launcher-icon:nth-of-type(3) {
+    margin-top:22px;
+  }
 	.launcher-plugin.layout5 .launcher-icons .launcher-icon img,
 	.launcher-plugin.layout6 .launcher-icons .launcher-icon img{
 		max-width:36px;
@@ -233,7 +255,12 @@
 	.launcher-plugin.layout6 .launcher-icons .launcher-icon{
 		margin-bottom:20px;
 		height:68px;
-	}
+  }
+  #splideContainer .launcher-icons .launcher-icon:nth-of-type(1),
+  #splideContainer .launcher-icons .launcher-icon:nth-of-type(2),
+  #splideContainer .launcher-icons .launcher-icon:nth-of-type(3) {
+    margin-top:20px;
+  }
 	.launcher-plugin.layout5 .launcher-icons .launcher-icon img,
 	.launcher-plugin.layout6 .launcher-icons .launcher-icon img{
 		max-width:32px;

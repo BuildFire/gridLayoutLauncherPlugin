@@ -56,7 +56,8 @@ folderPluginShared.getLayouts = function () {
         "./layouts/layout4.png",
         "./layouts/layout5.png",
         "./layouts/layout6.png",
-        "./layouts/layout7.png"
+        "./layouts/layout7.png",
+        "./layouts/layout8.png",
     ];
 };
 

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../../../styles/helper.css">
     <link rel="stylesheet" href="../../../styles/siteIcons.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/splide.min.css">
 
     <!-- JS -->
 
@@ -19,7 +20,8 @@
     <script type="text/javascript" src="../../../scripts/owlCarousel/owlCarousel.js"></script>
     <script src="../../../scripts/buildfire/components/carousel/carousel.js"></script>
     <script src="../../../scripts/buildfire/components/pluginInstance/sortableList.js"></script>
-  	<script src="assets/js/angular-lazy-img.js"></script>
+    <script src="assets/js/angular-lazy-img.js"></script>
+    <script src="assets/js/splide.min.js"></script>
 
 </head>
 <body ng-cloak class="gridLayout" ng-controller="folderPluginCtrl" data-back-img="{{backgroundImage}}">
@@ -82,7 +84,7 @@
         </div>
     </div>
     <div class="launcher-plugin layout{{ layoutClass[data.design.selectedLayout - 1] }}" ng-if="data.design.selectedLayout != 7">
-        <div class="main-logo" ng-if="data.design.logoImage && ([5, 6, 7].indexOf(data.design.selectedLayout) == -1)">
+        <div class="main-logo" ng-if="data.design.logoImage && ([5, 6, 7, 8].indexOf(data.design.selectedLayout) == -1)">
             <div class="logo-holder">
                 <table width="100%" cellspacing="0" cellpadding="0" height="100%">
                     <tbody>
@@ -105,7 +107,14 @@
                  ></div>
         </div>
 
-        <div id="launcherSlider" class="launcher-slider text-center"></div>
+        <div id="launcherSlider" class="launcher-slider text-center owl-carousel-vertical"></div>
+        <div id="splideContainer">
+          <div id="splide" style="position: relative;">
+            <div class="splide__track">
+              <ul class="splide__list"></ul>
+            </div>
+          </div>
+        </div>
     </div>
 </div>
 <script>
@@ -191,11 +200,11 @@
     /* End shared functionality */
 
     folderPluginShared.getLayoutsPageSize = function () {
-        return [3, 4, 6, 8, 9, 12];
+        return [3, 4, 6, 8, 9, 12, 0, 9];
     };
 
     folderPluginShared.getLayoutsClass = function () {
-        return [4, 2, 3, 1, 5, 6, 7];
+        return [4, 2, 3, 1, 5, 6, 7, 5];
     };
 
     var folderPluginApp = angular.module('folderPlugin', ['angularLazyImg']);
@@ -437,7 +446,18 @@
                 $scope.$apply();
             }
 
-            if ($scope.data.design.selectedLayout != 7) {
+            if (window.splideInstance) window.splideInstance.destroy();
+
+            if ($scope.data.design.selectedLayout == 8) {
+              var sliderHtml = $compile(prepareSliderHTML('splideLayout'))($scope);
+              $('#splide .splide__list').html(sliderHtml);
+              window.splideInstance = new Splide( '#splide', {
+                direction: 'ttb',
+                arrows: false,
+                pagination: false,
+                height: $('#splideContainer').innerHeight()
+              } ).mount();
+            } else if ($scope.data.design.selectedLayout != 7) {
                 var sliderHtml = $compile(prepareSliderHTML())($scope);
                 $('#launcherSlider').html(sliderHtml);
                 if ($scope.data.plugins.length > 1) {
@@ -517,6 +537,10 @@
         buildfire.datastore.onUpdate(function (result) {
 
             var iconSliderData = $('#launcherSlider').data('owlCarousel');
+            if (window.splideInstance) {
+              window.splideInstance.destroy();
+              $('#splide .splide__list').html("");
+            }
             if (iconSliderData) {
                 iconSliderData.trigger('autoplay.stop.owl');
                 iconSliderData.trigger('autoplay.loop.owl', false);
@@ -694,14 +718,15 @@
             return (b == 0) ? a : gcd(b, a % b);
         }
 
-        var prepareSliderHTML = function () {
+        var prepareSliderHTML = function (layout) {
             var slides = $scope.data.plugins,
                     slidesLength = slides.length,
                     slidesHTML = "";
             for (var i = 0; i < slidesLength; i++) {
                 var currentSlide = slides[i];
+                if (layout == 'splideLayout') slidesHTML += '<li class="splide__slide">';
                 slidesHTML += '<div class="plugin-slide">\
-			                       <div class="launcher-icons' + ([1, 3, 5].indexOf($scope.data.design.selectedLayout) != -1 ? ' three-row' : ' four-row') + '">';
+			                       <div class="launcher-icons' + ([1, 3, 5, 8].indexOf($scope.data.design.selectedLayout) != -1 ? ' three-row' : ' four-row') + '">';
                 for (var y = 0; y < currentSlide.length; y++) {
                     var pluginItem = currentSlide[y];
                     if(!pluginItem.hasAccess && $scope.data.design.securedFeaturesOption=="Hide")
@@ -725,7 +750,8 @@
 				            </a>';
                 }
                 slidesHTML += '	</div>\
-		            </div>';
+                </div>';
+                if (layout == 'splideLayout') slidesHTML += '</li>';
             }
             return slidesHTML;
         }
