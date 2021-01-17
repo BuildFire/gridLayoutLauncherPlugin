@@ -447,8 +447,11 @@
             }
 
             if (window.splideInstance) window.splideInstance.destroy();
+            var splideElem = document.getElementById('splideContainer');
+            if (splideElem) splideElem.style.display = 'none';
 
             if ($scope.data.design.selectedLayout == 8) {
+              if (splideElem) splideElem.style.display = 'block';
               var sliderHtml = $compile(prepareSliderHTML('splideLayout'))($scope);
               $('#splide .splide__list').html(sliderHtml);
               window.splideInstance = new Splide( '#splide', {
