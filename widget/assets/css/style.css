@@ -148,6 +148,7 @@
 
 #splideContainer {
   height: 100%;
+  display: none;
 }
 
 #splideContainer .launcher-icons .launcher-icon:nth-of-type(1),
