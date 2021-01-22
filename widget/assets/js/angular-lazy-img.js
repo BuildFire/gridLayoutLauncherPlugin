@@ -97,6 +97,7 @@ angular.module('angularLazyImg').factory('LazyImgMagic', [
       if ($elem[0].nodeName.toLowerCase() === 'img') {
         $elem[0].src = src;
       } else {
+        src=src.replace('"',"%22").replace("'","%27").replace("(","%28").replace(")","%29");
         $elem.css('background-image', 'url("' + src + '")');
       }
     }
