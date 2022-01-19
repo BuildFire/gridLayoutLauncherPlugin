@@ -291,8 +291,8 @@
                 var img = '';
                 if (value) {
                     buildfire.imageLib.local.cropImage(value, {
-                        width: "full",
-                        height: "full"
+                        width: buildfire.getContext().initialWidth || window.innerWidth || "full",
+                        height: buildfire.getContext().initialHeight || window.innerHeight || "full"
                     }, function (err, imgUrl) {
                         if (imgUrl) {
                             img = imgUrl.replace('"',"%22").replace("'","%27").replace("(","%28").replace(")","%29");
@@ -339,8 +339,8 @@
             return !plugin.hasAccess && $scope.data.design.securedFeaturesOption=='Disable'?"item-disabled":"";
         };
         /*declare the device width heights*/
-        $rootScope.deviceHeight = document.documentElement.clientHeight;
-        $rootScope.deviceWidth = window.innerWidth;
+        $rootScope.deviceHeight = buildfire.getContext().initialHeight || window.innerHeight ||  document.documentElement.clientHeight;
+        $rootScope.deviceWidth = buildfire.getContext().initialWidth || window.innerWidth || window.innerWidth;
 
         buildfire.auth.onLogin(function (user) {
             console.log('New user loggedIN reload data to apply security', user);
