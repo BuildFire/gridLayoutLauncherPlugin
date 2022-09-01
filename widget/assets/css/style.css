@@ -206,7 +206,7 @@
 }
 
 @media (max-height: 542px) {
- 	.plugin-slide img,
+	.plugin-slide img,
 	.launcher-plugin.layout5 .plugin-slide img,
 	.launcher-plugin.layout6 .plugin-slide img{
 		max-height:190px !important;
@@ -270,7 +270,4 @@
 	.launcher-plugin.layout6 .launcher-icons .launcher-icon span.main-icon{
 		font-size:32px;
 	}
-}
-.plugin-slide img[style]{
-	width: 100%!important;
 }
