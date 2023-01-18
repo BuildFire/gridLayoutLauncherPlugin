@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "supportSite": "http://learn.appdocumentation.com/plugin-tutorials/grid-layout-launcher-plugin-tutorial",
+  "supportSite": "https://learn.appdocumentation.com/en/articles/5128845-home-page-grid-layout-feature-tutorial",
   "scripts": {
     "postinstall": "./node_modules/.bin/bower install",
     "test": "./node_modules/.bin/karma start karma.conf.js"
