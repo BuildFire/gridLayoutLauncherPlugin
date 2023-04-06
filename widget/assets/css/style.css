@@ -48,7 +48,7 @@
 	width:33.333%;
 }
 .launcher-plugin .launcher-icons .launcher-icon .main-icon{
-	font-size:3.2rem;
+	font-size:32px;
 	display:block;
 }
 .launcher-plugin .launcher-icons .launcher-icon img,
@@ -273,7 +273,7 @@
 }
 
 @media (min-width: 768px) {
-	.launcher-plugin .launcher-icons .launcher-icon img{
-		max-width: 42px !important;
+	.launcher-plugin .launcher-icons .launcher-icon .text-holder p{
+		font-size:1.4rem;
 	}
 }
