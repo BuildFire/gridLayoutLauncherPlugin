@@ -58,7 +58,7 @@
 }
 .launcher-plugin .launcher-icons .launcher-icon .text-holder p{
 	margin:6px 0 0;
-	font-size:1.4rem;
+	font-size:1.2rem;
 	line-height:15px;
 	word-wrap:break-word;
 	position:relative;
@@ -272,7 +272,7 @@
 	}
 }
 
-@media (min-device-width: 768px) {
+@media (min-width: 768px) {
 	.launcher-plugin .launcher-icons .launcher-icon img{
 		max-width: 42px !important;
 	}
