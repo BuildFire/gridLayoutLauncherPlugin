@@ -272,8 +272,17 @@
 	}
 }
 
-@media (min-width: 768px) {
-	.launcher-plugin .launcher-icons .launcher-icon .text-holder p{
-		font-size:1.4rem;
+@media (min-width:720px) {
+	.launcher-plugin .launcher-icons .launcher-icon{
+		height: 80px !important;
+	}
+
+	.launcher-plugin .launcher-icons .launcher-icon .text-holder p {
+		font-size: 1.4rem !important;
+	}
+
+	.launcher-plugin .launcher-icons .launcher-icon img {
+		max-width: 40px !important;
+		min-width: 40px !important;
 	}
 }
