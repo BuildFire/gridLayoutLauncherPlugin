@@ -290,13 +290,10 @@
             attrs.$observe('backImg', function (value) {
                 var img = '';
                 if (value) {
-                    buildfire.imageLib.local.cropImage(value, {
-                        width: $rootScope.deviceWidth,
-                        height: $rootScope.deviceHeight
-                    }, function (err, imgUrl) {
-                        if (imgUrl) {
-                            img = imgUrl.replace('"',"%22").replace("'","%27").replace("(","%28").replace(")","%29");
-                            element.attr("style", 'background:url(' + img + ') !important ; background-size: cover !important;');
+                    let croppedImage = buildfire.imageLib.resizeImage(value, { width: window.innerWidth, height: window.innerHeight});
+                    if (croppedImage) {
+                            img = croppedImage.replace('"',"%22").replace("'","%27").replace("(","%28").replace(")","%29");
+                            element.attr("style", 'background:url(' + croppedImage + ') !important ; background-repeat: no-repeat !important; background-size: 100% 100% !important;');
                         } else {
                             img = '';
                             element.attr("style", 'background-color:white');
@@ -304,8 +301,6 @@
                                 'background-size': 'cover !important'
                             });
                         }
-                    });
-                    // img = $filter("cropImage")(value, $rootScope.deviceWidth, $rootScope.deviceHeight, true);
                 }
                 else {
                     img = "";
