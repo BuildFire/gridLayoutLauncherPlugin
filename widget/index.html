@@ -288,32 +288,46 @@
     folderPluginApp.directive('backImg', ["$rootScope", function ($rootScope) {
         return function (scope, element, attrs) {
             attrs.$observe('backImg', function (value) {
-                var img = '';
-                if (value) {
-                    buildfire.imageLib.local.cropImage(value, {
-                        width: $rootScope.deviceWidth,
-                        height: $rootScope.deviceHeight
-                    }, function (err, imgUrl) {
-                        if (imgUrl) {
-                            img = imgUrl.replace('"',"%22").replace("'","%27").replace("(","%28").replace(")","%29");
-                            element.attr("style", 'background:url(' + img + ') !important ; background-size: cover !important;');
-                        } else {
-                            img = '';
-                            element.attr("style", 'background-color:white');
-                            element.css({
-                                'background-size': 'cover !important'
-                            });
+                getImageDimensions(value).then(res => {
+                    var img = '';
+                    if (value) {
+                        if(res.aspectRatio !== 1 && res.url){
+                            buildfire.imageLib.local.cropImage(value, {
+                            width: $rootScope.deviceWidth,
+                            height: $rootScope.deviceHeight
+                        }, function (err, imgUrl) {
+                            if (imgUrl) {
+                                img = imgUrl.replace('"', "%22").replace("'", "%27").replace("(", "%28").replace(")", "%29");
+                                element.attr("style", 'background:url(' + img + ') !important ; background-size: cover !important;');
+                            } else {
+                                img = '';
+                                element.attr("style", 'background-color:white');
+                                element.css({
+                                    'background-size': 'cover !important'
+                                });
+                            }
+                        });
+                        // img = $filter("cropImage")(value, $rootScope.deviceWidth, $rootScope.deviceHeight, true);
+                        }else{
+                            const encodedUrl = value.replace(/\s/g, '%20').replace(/\(/g, '%28').replace(/\)/g, '%29');
+                            element.attr("style", 'background:url(' + encodedUrl + ') !important ; background-size: contain !important; background-position: center !important; background-repeat: no-repeat !important;');
                         }
-                    });
-                    // img = $filter("cropImage")(value, $rootScope.deviceWidth, $rootScope.deviceHeight, true);
-                }
-                else {
-                    img = "";
+
+                    }
+                    else {
+                        img = "";
+                        element.attr("style", 'background-color:white');
+                        element.css({
+                            'background-size': 'cover !important'
+                        });
+                    }
+                }).catch((error) => {
+                    img = '';
                     element.attr("style", 'background-color:white');
                     element.css({
                         'background-size': 'cover !important'
                     });
-                }
+                });
             });
         };
     }])
@@ -759,6 +773,17 @@
             return slidesHTML;
         }
     }]);
+
+    function getImageDimensions(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+                resolve({ url, width: img.naturalWidth, height: img.naturalHeight, aspectRatio: Math.floor(img.naturalWidth / img.naturalHeight) });
+            };
+            img.onerror = reject;
+            img.src = url;
+        });
+    }
 </script>
 </body>
 </html>
