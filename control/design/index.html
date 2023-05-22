@@ -17,6 +17,12 @@
     <script src="../../js/angular-color-picker.js"></script>
     <script src="../../js/shared.js"></script>
 
+    <style>
+        .thumbnail-border {
+            border: 2px solid rgba(0, 0, 0, 0.4);
+        }
+    </style>
+
 </head>
 <body ng-controller="folderPluginCtrl" ng-cloak ng-show="datastoreInitialized">
 <div ng-form="frmMain">
@@ -68,7 +74,7 @@
                     <div class="screen mostdevices pull-left text-center">
                         <a class="border-radius-three default-background-hover" ng-click="changeBackground('i3x2')">
                             <span ng-hide="data.design.backgroundImage.i3x2" class="add-icon">+</span>
-                            <img ng-show="data.design.backgroundImage.i3x2" ng-src="{{resizeImage(data.design.backgroundImage.i3x2)}}">
+                            <img class="thumbnail-border" ng-show="data.design.backgroundImage.i3x2" ng-src="{{cropImage(data.design.backgroundImage.i3x2, 640,960)}}">
                         </a>
                         <label>3:2</label>
                         <label class="secondary">640x960</label>
@@ -78,7 +84,7 @@
                     <div class="screen iphone pull-left text-center">
                         <a class="border-radius-three default-background-hover" ng-click="changeBackground('i16x9')">
                             <span ng-hide="data.design.backgroundImage.i16x9" class="add-icon">+</span>
-                            <img ng-show="data.design.backgroundImage.i16x9" ng-src="{{resizeImage(data.design.backgroundImage.i16x9)}}">
+                            <img class="thumbnail-border" ng-show="data.design.backgroundImage.i16x9" ng-src="{{cropImage(data.design.backgroundImage.i16x9, 1242, 2208)}}">
                         </a>
                         <label>16:9</label>
                         <label class="secondary">1242x2208</label>
@@ -89,7 +95,7 @@
                     <div class="screen ipads pull-left text-center">
                         <a class="border-radius-three default-background-hover" ng-click="changeBackground('i4x3')">
                             <span ng-hide="data.design.backgroundImage.i4x3" class="add-icon">+</span>
-                            <img ng-show="data.design.backgroundImage.i4x3" ng-src="{{resizeImage(data.design.backgroundImage.i4x3)}}">
+                            <img class="thumbnail-border" ng-show="data.design.backgroundImage.i4x3" ng-src="{{cropImage(data.design.backgroundImage.i4x3, 1536, 2048)}}">
                         </a>
                         <label>4:3</label>
                         <label class="secondary">1536x2048</label>
@@ -99,7 +105,7 @@
                     <div class="screen tablets pull-left text-center">
                         <a class="border-radius-three default-background-hover" ng-click="changeBackground('i16x10')">
                             <span ng-hide="data.design.backgroundImage.i16x10" class="add-icon">+</span>
-                            <img ng-show="data.design.backgroundImage.i16x10" ng-src="{{resizeImage(data.design.backgroundImage.i16x10)}}">
+                            <img class="thumbnail-border" ng-show="data.design.backgroundImage.i16x10" ng-src="{{cropImage(data.design.backgroundImage.i16x10, 1600, 2560)}}">
                         </a>
                         <label>16:10</label>
                         <label class="secondary">1600x2560</label>
@@ -357,6 +363,18 @@
             }
             else {
                 return buildfire.imageLib.resizeImage(url, {width: 88});
+            }
+        };
+
+        $scope.cropImage = function (url, width, height) {
+            if (!url) {
+                return "";
+            }
+            else {
+                let croppedImage = buildfire.imageLib.cropImage(
+                    url,
+                    { width, height });
+                return croppedImage
             }
         };
 
