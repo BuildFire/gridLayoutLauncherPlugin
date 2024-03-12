@@ -1,4 +1,5 @@
 ﻿var folderPluginShared = folderPluginShared || {};
+const instanceId = buildfire.getContext().instanceId;
 
 folderPluginShared.getPluginDetails = function (pluginsInfo, pluginIds) {
     var returnPlugins = [];
@@ -62,6 +63,8 @@ folderPluginShared.getLayouts = function () {
 };
 
 folderPluginShared.save = function (newObj) {
+    const sameInstance = validateSameInstance();
+    if (!sameInstance) return;
     buildfire.datastore.save(newObj, function (err, result) {
         if (err || !result) {
             console.error('Error saving the widget details: ', err);
@@ -77,3 +80,14 @@ folderPluginShared.digest = function ($scope) {
         $scope.$apply();
     }
 };
+
+/**
+ * @function validateSameInstance
+ * this function is added to avoid affects on multi instances and home screen, 
+ * which is happening when update something then navigate back to home screen before getting db callback
+ * 
+ * for full info: https://buildfire.atlassian.net/browse/PLUG-649, https://buildfire.atlassian.net/browse/PLUG-1923
+ */
+function validateSameInstance() {
+    return buildfire.getContext().instanceId === instanceId;
+}
