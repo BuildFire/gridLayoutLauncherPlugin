@@ -1,5 +1,4 @@
 ﻿var folderPluginShared = folderPluginShared || {};
-const instanceId = buildfire.getContext().instanceId;
 
 folderPluginShared.getPluginDetails = function (pluginsInfo, pluginIds) {
     var returnPlugins = [];
