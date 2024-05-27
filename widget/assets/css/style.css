@@ -31,14 +31,15 @@
 .launcher-plugin .launcher-icons{
 	padding-left:5px;
 	padding-right:5px;
-	float:left;
+	display: flex;
+	align-items: stretch;
+	flex-wrap: wrap;
+	justify-content: flex-start;
 	width:100%;
 }
 .launcher-plugin .launcher-icons .launcher-icon{
 	float:left;
 	margin-bottom:12px;
-	height:68px;
-	overflow:hidden;
 }
 .launcher-plugin .launcher-icons.four-row .launcher-icon{
 	width:25%;
@@ -59,9 +60,8 @@
 .launcher-plugin .launcher-icons .launcher-icon .text-holder p{
 	margin:6px 0 0;
 	font-size:12px;
-	line-height:15px;
 	word-wrap:break-word;
-	position:relative;
+	line-height:15px;
 	transform: translateZ(0px);
 	-webkit-transform: translateZ(0px);
 }
