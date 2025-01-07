@@ -1,7 +1,7 @@
 {
    "author":"Buildfire",
-   "pluginName":"Home Page Grid Layout",
-   "pluginDescription":"Create a unique home page-like experience to point your users where you want them to go. You can also use this as a home folder inside your app.",
+   "pluginName":"Home Folder",
+   "pluginDescription":"Create a unique, home page experience to guide users where you want them to go. Use it as a customizable home folder within your app for seamless navigation.",
    "supportEmail":"support@buildfire.com",
    "supportSite":"https://learn.appdocumentation.com/en/articles/5128845-home-page-grid-layout-feature-tutorial",
    "offlineModeEnabled": true,
