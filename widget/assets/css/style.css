@@ -1,3 +1,6 @@
+body {
+	padding-top: var(--bf-safe-area-inset-top);
+}
 /* Launcher Plugin */
 .launcher-plugin .owl-carousel .owl-controls .owl-dots{
 	bottom:2px;
@@ -70,6 +73,9 @@
 }
 .launcher-plugin.layout7 .menu-links .menu-link{
 	position:relative;
+}
+.launcher-plugin.layout7 .menu-links{
+	padding-bottom: var(--bf-safe-area-inset-bottom);
 }
 .launcher-plugin.layout7 .menu-links .menu-link:before{
 	content:'';
